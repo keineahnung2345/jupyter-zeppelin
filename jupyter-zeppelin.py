@@ -6,7 +6,10 @@ import html
 import nbformat
 import codecs
 from aws.s3 import S3
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
 
 MD = re.compile(r'%md\s')
 SQL = re.compile(r'%sql\s')
@@ -172,9 +175,9 @@ if __name__ == '__main__':
 
     zeppelin_note_path = None
     target_path = None
-    if num_args == 2:
+    if num_args >= 2:
         zeppelin_note_path = sys.argv[1]
-    elif num_args == 3:
+    if num_args == 3:
         target_path = sys.argv[2]
 
     if not zeppelin_note_path:
@@ -182,4 +185,3 @@ if __name__ == '__main__':
 
     name, content = convert_json(read_io(zeppelin_note_path))
     write_notebook(name, content, target_path)
-
